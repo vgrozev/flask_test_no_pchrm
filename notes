@@ -1,3 +1,7 @@
+==================================
+=== virtualenvl =========================
+==================================
+
 sudo pip install virtualenv
 virtualenv virt-flask
 source virt-flask/bin/activate
@@ -10,7 +14,7 @@ pip freeze > requirements.txt
 
 
 ==================================
-=== initial ===========================
+=== initial   ===========================
 ==================================
 
 mkdir flask_test_no_pchrm
@@ -147,5 +151,28 @@ touch base.html index.html about.html
 
 -----------------------------------------------
 
+source virt-flask/bin/activate
+
 export FLASK_APP=run.py
 flask run
+
+deactivte
+
+==================================
+==================================
+***********************  git part ************
+create on github :    git remote add origin https://github.com/vgrozev/flask_test_no_pchrm.git
+
+cd ~/flask_projs/flask_test_no_pchrm/
+
+touch .gitignore
+vim .gitignore
+	# ignored files and dirs
+	*\#*
+	*virt*
+	__pycache__
+
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/vgrozev/flask_test_no_pchrm.git
