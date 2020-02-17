@@ -1,0 +1,151 @@
+sudo pip install virtualenv
+virtualenv virt-flask
+source virt-flask/bin/activate
+
+pip freeze > requirements.txt
+
+# later if needed:  pip install -r requirements.tx
+
+-----------------------------------------------
+
+
+==================================
+=== initial ===========================
+==================================
+
+mkdir flask_test_no_pchrm
+cd flask_test_no_pchrm
+
+touch run.py config.py
+
+mkdir -p tst_app/templates
+cd tst_app && touch __init__.py views.py
+
+├── flask_test_no_pchrm
+       ├── tst_app
+       │   ├── __init__.py
+       │   ├── templates
+       │   └── views.py
+       ├── config.py
+       ├── requirements.txt
+       └── run.py
+
+-----------------------------------------------
+# config.py
+
+# Enable Flask's debugging features. Should be False in production
+DEBUG = True
+
+-----------------------------------------------
+# tst_app/__init__.py
+
+from flask import Flask
+
+# Initialize the tst_app
+app = Flask(__name__, instance_relative_config=True)
+
+# Load the views
+from tst_app import views
+
+# Load the config file
+app.config.from_object("config")
+
+-----------------------------------------------
+# run.py
+
+from tst_app import app
+
+if __name__ == '__main__':
+app.run()
+
+==================================
+=== views ===========================
+==================================
+
+-----------------------------------------------
+# tst_app/views.py
+
+from flask import render_template
+
+from tst_app import app
+
+
+@app.route('/')
+def index():
+return render_template("index.html")
+
+
+@app.route('/about')
+def about():
+return render_template("about.html")
+
+-----------------------------------------------
+
+
+==================================
+=== templates   ========================
+==================================
+
+cd tst_app/templates
+touch base.html index.html about.html
+
+-----------------------------------------------
+<!-- base.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+    <!-- Bootstrap core CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="https://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation"><a href="/">Home</a></li>
+            <li role="presentation"><a href="/about">About</a></li>
+            <li role="presentation"><a href="http://flask.pocoo.org" target="_blank">More About Flask</a></li>
+          </ul>
+        </nav>
+      </div>
+      {% block body %}
+      {% endblock %}
+      <footer class="footer">
+        <p>© 2020 Vlado Best</p>
+      </footer>
+    </div> <!-- /container -->
+  </body>
+</html>
+
+-----------------------------------------------
+<!-- index.html-->
+
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block body %}
+<div class="jumbotron">
+  <h1>Flask Is Awesome</h1>
+  <p class="lead">And I'm glad to be learning so much about it!</p>
+</div>
+{% endblock %}
+
+-----------------------------------------------
+<!-- about.html-->
+
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+{% block body %}
+<div class="jumbotron">
+  <h1>The About Page</h1>
+  <p class="lead">You can learn more about my website here.</p>
+</div>
+{% endblock %}
+
+-----------------------------------------------
+
+export FLASK_APP=run.py
+flask run
